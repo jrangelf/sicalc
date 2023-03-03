@@ -2,57 +2,29 @@ version: "3.3"
 
 services:
 
-  pgsql-db:
-    container_name: dcp-app-pgsql
+  pgsql:
+    container_name: dcp-pgsql
     image: postgres
-    restart: always
-    user: postgres  # importante definir o usuário
+    #restart: always
+    user: "$UID:$GID"
     volumes:
-      - ./pgsql:/var/lib/postgresql/data
+     - ./postgres/data:/var/lib/postgresql/data
     
     environment:
       - LC_ALL=C.UTF-8
       - POSTGRES_PASSWORD=admin  # senha padrão
       - POSTGRES_USER=postgres  # usuário padrão
       - POSTGRES_DB=postgres  # necessário porque foi configurado assim no settings
+     #- PGDATA=pgdata
     ports:
       - 5432:5432  # repare na porta externa 5431
     networks:
-      - dcp-app
-
-  pgadmin:
-    container_name: dcp-app-pgadmin
-    image: dpage/pgadmin4
-    restart: unless-stopped
-    volumes:
-      - ./pgadmin:/var/lib/pgadmin
-    environment:
-      PGADMIN_DEFAULT_EMAIL: admin@admin.com
-      PGADMIN_DEFAULT_PASSWORD: admin
-      PGADMIN_CONFIG_SERVER_MODE: 'False'
-    ports:
-      - 5051:80
-    networks:
-      - dcp-app
-
-  nginx:
-    container_name: dcp-app-nginx
-    image: nginx
-    ports:
-      - '80:80'
-    volumes:
-      - ./nginx/website:/usr/share/nginx/html
-    depends_on:
-      - pgsql-db
-    networks:
-      - dcp-app
+      - dcp
 
 
 volumes:
-  pgsql-db:  # mesmo nome do volume externo definido na linha 10
-  pgadmin:
-  nginx:
+  pgsql:
   
 networks:
-  dcp-app:
+  dcp:
 

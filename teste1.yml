@@ -1,0 +1,36 @@
+version: '3.3'
+
+
+services:
+  db:
+     container_name: postgres
+     image:  postgres
+     environment:
+       POSTGRES_DB: tabelas          
+       POSTGRES_USER: postgres
+       POSTGRES_PASSWORD: admin
+       PGDATA: /var/lib/pgsql/data/pgdata
+     ports:
+       - 5432:5432
+     volumes:
+       - ./volumes/pgsql/data:/var/lib/pgsql/data/pgdata
+
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4
+    restart: unless-stopped
+    volumes:
+       - pgadmin:/var/lib/pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    ports:
+      - 5051:80
+
+
+volumes:
+  pgadmin:
+
+networks:
+  dcpnet:

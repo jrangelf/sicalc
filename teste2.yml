@@ -1,0 +1,17 @@
+services:
+    postgres:
+        image: postgres
+        restart: always
+        environment:
+            - POSTGRES_USER=sicalc
+            - POSTGRES_PASSWORD=admin
+            - POSTGRES_DB=tabelas
+        user: root
+        ports:
+            - "5432:5432"
+        volumes:
+            - ./volumes/postgres/data:/var/lib/postgresql/data
+            - ./volumes/postgres/config:/etc/postgresql
+        #entrypoint: [ "bash", "-c", "chmod 750 -R /var/lib/postgresql/data && chmod 750 -R /etc/postgresql"] 
+    
+

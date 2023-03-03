@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block title %}SICALC | Tabelas DCP{% endblock %}
+
+
+{% block content %}
+
+{% load static %}
+
+<h4>Tabelas DCP</h4>
+<hr/>
+
+<!-- <p>{{ first_name }} / {{ last_name }} </p> -->
+    <script src="{% static 'js/my_javascript.js' %}"></script>
+    <!-- <script> noback(); </script> -->
+
+<main>
+    
+  <form enctype="multipart/form-data" action="{% url 'tabelasdcp-lista' %}" target="_blank" method="POST">
+      {% csrf_token %} 
+
+    <div class="container">
+      <div class="row">
+      <div class="col-sm-6">
+          <select class="form-control" id="tabelas" name="tabelas" required>
+            <option></option>
+              {% if tabelas %}
+                {% for k in tabelas %}
+                  <option value="{{ k }}">{{ k }}</option>
+                {% endfor %}
+              {% endif %} 
+          </select> 
+      </div> 
+    </div>
+    
+    <div class="row">
+      <div class="col-sm-6">
+        <button type="submit" class="btn btn-primary mt-3">Obter Informações</button>
+      </div>
+    </div>          
+   
+    <br>
+    </div>
+
+  </form>
+
+</main>
+
+{% endblock %}
+
