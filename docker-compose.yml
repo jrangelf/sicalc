@@ -1,30 +1,54 @@
-version: "3.3"
-
+version: '3.7'
 services:
-
   pgsql:
-    container_name: dcp-pgsql
-    image: postgres
-    #restart: always
-    user: "$UID:$GID"
-    volumes:
-     - ./postgres/data:/var/lib/postgresql/data
-    
-    environment:
-      - LC_ALL=C.UTF-8
-      - POSTGRES_PASSWORD=admin  # senha padrão
-      - POSTGRES_USER=postgres  # usuário padrão
-      - POSTGRES_DB=postgres  # necessário porque foi configurado assim no settings
-     #- PGDATA=pgdata
+    container_name: pgsql
+    build:
+      context: ./postgres
+      dockerfile: dockerfile.postgres
     ports:
-      - 5432:5432  # repare na porta externa 5431
-    networks:
-      - dcp
+      - '5432:5432'
+    restart: always  
+    volumes:
+      - ./postgres/db:/var/lib/postgresql/data      
+    env_file:
+      - ./env/postgres.env
 
+  app:
+    container_name: app
+    build:
+      context: ./app
+      dockerfile: ./dockerfile.app
+    tty: true
+    #command: python3 manage.py runserver 0.0.0.0:8000
+    #command: uwsgi --http :8000 --module acd_app.wsgi
+    #command: uwsgi --socket acd_app.sock --module acd_app.wsgi --chmod-socket=666
+    #command: uwsgi --socket :8000 --master --enable-threads --module acd_app.wsgi
 
-volumes:
-  pgsql:
+    command: uwsgi --socket app:8000 --module acd_app.wsgi --master --enable-threads                    
+
+    #stdin_open: true
+    ports:
+      - '8000:8000'  
+    depends_on:
+      - pgsql
+    restart: on-failure
+    volumes:
+      - ./app:/app
+      - static_data:/app/static     
+    env_file:
+      - ./env/app.env
   
-networks:
-  dcp:
-
+  nginx:
+    container_name: nginx
+    build:
+      context: ./nginx
+      dockerfile: ./dockerfile.nginx
+    volumes:
+      - static_data:/vol/static
+      - ./nginx/log:/var/log/nginx      
+    ports:
+      - '80:80'
+    depends_on:
+      - app  
+volumes:
+  static_data:
