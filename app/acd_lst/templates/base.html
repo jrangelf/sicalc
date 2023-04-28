@@ -16,16 +16,17 @@
     {{ form.media }}
     <title>{% block title %}{% endblock %}</title>
   </head>
+
   <body style="background-color: #F6F7FC;">
     <!--Navbar-->
-<nav class="navbar fixed-top navbar-expand-lg scrolling-navbar navbar-dark" style="background-color: #023E8A;">
+    <nav class="navbar fixed-top navbar-expand-lg scrolling-navbar navbar-dark" style="background-color: #023E8A;">
 
-  <a class="navbar-brand" href="{% url 'home' %}">SICALC</a>
+      <a class="navbar-brand" href="{% url 'home' %}">SICALC</a>
   
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+      </button>
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
@@ -46,8 +47,9 @@
           aria-expanded="false">Ferramentas
         </a>
         <div class="dropdown-menu dropdown-primary" aria-labelledby="menuferramentas">
-          <a class="dropdown-item" href="{% url 'extrator' %}">Ficha Financeira</a>
-          <a class="dropdown-item" href="{% url 'obitos' %}">Verificação de óbitos</a>          
+          <a class="dropdown-item" href="{% url 'ficha' %}">Ficha Financeira</a>
+          <a class="dropdown-item" href="{% url 'obitos' %}">Verificação de óbitos</a>
+          <a class="dropdown-item" href="{% url 'extrator' %}">Extrator de rubricas</a>          
         </div>
       </li>    
       
@@ -70,11 +72,11 @@
   </div>
 </nav>
 
-<br/><br/><br/>
-<div class="container">
+  <br/><br/><br/>
+  <div class="container">
     {% block content %}
     {% endblock %}
-</div>
+  </div>
 
 
     <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->

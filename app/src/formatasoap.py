@@ -1,6 +1,6 @@
 from copy import deepcopy
 from src.verificacpf import formater
-from acd_lst.models import Rubricas, CargoEmprego,OrgaoSiape
+from acd_lst.models import Rubricas, CargoEmprego, OrgaoSiape
 
 def formataDadosServidor (envelope):
 	
@@ -152,9 +152,17 @@ def formataFichaFinanceira(envelope):
 				#print("(2) =============================")
 				#print(ficha[i]['vinculos']['vinculo'][j])
 				nomecargo = ''
-				nomeorgao = OrgaoSiape.objects.get(codigo=str(codigo_orgao))
-				if codigo_cargo != 0 and codigo_grupo_cargo != 0:				
-					nomecargo = CargoEmprego.objects.get(codcargo=codigo_cargo, codgrupocargo=codigo_grupo_cargo)
+				try:
+					nomeorgao = OrgaoSiape.objects.get(codigo=str(codigo_orgao))
+				except:
+					nomeorgao = 'Não informado'
+
+				
+				if codigo_cargo != 0 and codigo_grupo_cargo != 0:
+					try:
+						nomecargo = CargoEmprego.objects.get(codcargo=codigo_cargo, codgrupocargo=codigo_grupo_cargo)
+					except:
+						nomecargo = 'Não informado'
 				
 				cad = {'ano':ano,'orgao':codigo_orgao,'matricula':matricula,'codgcargo':codigo_grupo_cargo,'codcargo':codigo_cargo,'classe':classe,'padrao':padrao,'sigla':sigla_regime,'nomeorgao':nomeorgao,'nomecargo':nomecargo}
 				cadastros.append(cad)
@@ -167,9 +175,11 @@ def formataFichaFinanceira(envelope):
 					datapgto = ficha[i]['vinculos']['vinculo'][j]['fichaFinanceira']['itemFichaFinanceira'][k]['dataPagamento']
 					valor = ficha[i]['vinculos']['vinculo'][j]['fichaFinanceira']['itemFichaFinanceira'][k]['valor']
 					
-					nomerubrica = Rubricas.objects.get(codigorubrica=str(rubrica))
-					
-
+					try:
+						nomerubrica = Rubricas.objects.get(codigorubrica=str(rubrica))
+					except:
+						nomerubrica = 'N/I'
+										
 					reg = [ano,codigo_orgao, rubrica, str(nomerubrica), rendimento,sequencia,datapgto,float(valor)]
 					registros.append(reg)
 					

@@ -156,12 +156,16 @@ def postar_tabelas_indices(nome_tabela):
 
     data_atualizacao = listaP[-1][1]
     numero_linhas = len(listaP)
-    #_data_atualiza = force_str(data_atualizacao)
-    #print("==> data_atualizacao: " + _data_atualiza)
-    #print(f'========== tamanho da lista de índices: {numero_linhas}')
-    #print(f'========== código da tabela: {cod_tab}')
-    #print(f'========== tabela: {nome_tab}')
-    #print(f'========== descrição: {descricao}')
+
+    _data_atualiza = force_str(data_atualizacao, encoding='utf-8')
+    _num_linhas = force_str(numero_linhas, encoding='utf-8')
+    _cod_tab = force_str(cod_tab, encoding='utf-8')
+    
+    #print('==> data_atualizacao: ' + _data_atualiza)
+    #print('==> tamanho da lista de índices' + _num_linhas)
+    #print('==> código da tabela: ' + _cod_tab)
+    #print('==> tabela: ' + nome_tab)
+    #print('==> descrição: ' + descricao)
 
     return {'tabela':nome_tab,
             'lista':listaP,

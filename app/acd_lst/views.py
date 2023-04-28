@@ -40,6 +40,54 @@ def upload_file(request):
     return render(request, 'upload_home.html', {'form': form})
 
 
+def ficha(request):
+
+	if DEBUG:
+		print("** FICHA FINANCEIRA **")
+	
+	if request.method == "POST":
+		x = request.POST.get('numero_cpf')
+		#print("---")
+		#print (x)
+		#print('---')
+
+	first_name = "DCP"
+	last_name = "Brasília-DF"
+	return render(request,'ficha.html',{'first_name':first_name,'last_name':last_name})
+
+def fichalista(request):
+	
+	import json
+	
+	listacpf = {} #dicionário {'id':id,'cpf':cpf, 'nome':nome, 'dataobito':data}
+	lista_validos = []
+	lista_invalidos = []
+	total_invalidos =0
+	total_validos = 0
+	
+	bruto,desconto,liquido = [0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0]
+	totbruto,totdesc,totliq = 0,0,0
+	print ("** FICHA FINANCERIA LISTA **")
+
+	if request.method == "POST":
+		_cpf = request.POST.get('cpf')
+		_anoi = request.POST.get('anoinicial')
+		_anof = request.POST.get('anofinal')
+		
+		#print (_cpf, _anoi, _anof)
+		
+		listacpf = validarCPF(_cpf) 
+		
+		#print (listacpf)
+		lista_validos = listacpf['validos']
+		#print (lista_validos)
+
+		fichas = buscarFichaFinanceira(lista_validos,_anoi,_anof)		
+
+	return render(request,'ficha-lista.html',{'fichas':fichas, 'bruto':bruto,'desconto':desconto,'liquido':liquido})
+
+
+
 def extrator(request):
 
 	if DEBUG:
@@ -214,7 +262,7 @@ def tabelasdcp(request):
 		valores = dict(request.POST.items())
 		for valor in valores.values():
 			lista_registros.append(valor)
-			
+
 		print ("--postar_tabelas_indice(valor)--begin")
 		item = postar_tabelas_indices(valor)
 		print ("--postar_tabelas_indice(valor)--end")
