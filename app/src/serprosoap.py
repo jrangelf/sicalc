@@ -3,6 +3,7 @@ import copy
 from src.verificacpf import formater
 from src.formatasoap import *
 from acd_app.settings import TOKEN
+from src.configura_debug import *
 
 client = Client(wsdl='https://app.sicap.agu.gov.br/SiapeSicapService?wsdl')
 #https://app.sicap.agu.gov.br/SiapeSicapService/ServicoSiape
@@ -13,6 +14,7 @@ dados2=''
 
 
 def buscarDataObito(lista_cpf_validos):
+	debug('(serprosoap/buscarDataObito)')
 	#print ("#---(inicio)--buscarDataObito------------------------")
 	#print ("#-lista_cpf_validos----------------------------------")
 	#print (lista_cpf_validos)

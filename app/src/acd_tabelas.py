@@ -1,30 +1,31 @@
 from django.utils.encoding import force_str
 from acd_lst.models import *
+from src.configura_debug import *
 #from acd_lst.models import T21ListaTabelasDCP, T01TabelaDCP,T02TabelaDCP 
 
 def tipos_de_campos(codigo):
-    print ("inside tipos de campos ")
+    debug ("inside tipos de campos ")
     campos = []
-    #print("código: " + force_str(codigo))
+    #debug("código: " + force_str(codigo))
 
     if (codigo == 17 or codigo ==18):
-        print("tabelas de juros 0,5% \\e 1%")
+        debug("tabelas de juros 0,5% \\e 1%")
     
     elif (codigo == 16):
-        print("tabela de juros")
+        debug("tabela de juros")
         campos = ['data',
                 'cod_indexador',
                 'meta_selic',
                 'taxa_mensal']
         
     elif (codigo == 19):
-        print("tabela SELIC")
+        debug("tabela SELIC")
         campos = ['data',
                 'cod_indexador',
                 'indice_correcao']
 
     elif (codigo == 20):
-        # print("Tabela de Série Histórica")
+        # debug("Tabela de Série Histórica")
         campos = ['ord',
                'vigencia',
                'moeda',
@@ -33,7 +34,7 @@ def tipos_de_campos(codigo):
                
     
     elif (codigo == 24):
-        #print("Tabela da WebGCALC")
+        #debug("Tabela da WebGCALC")
         pass
     
     else:
@@ -50,14 +51,14 @@ def tipos_de_campos(codigo):
 def criar_lista_campos(tab, codigo, campo):
     lista = []
     listaS = []    
-    #print("código: " + str(codigo))
+    #debug("código: " + str(codigo))
 
     if (codigo == 17 or codigo ==18):
-        # print("tabelas de juros 0,5% \\e 1%")
+        # debug("tabelas de juros 0,5% \\e 1%")
         pass
     
     elif (codigo == 16):
-        # print("tabela de juros poupança")
+        # debug("tabela de juros poupança")
         for i in range(tab.count()):
             listaS.append(i)
             listaS.append(tab.values()[i][campo[0]]) #t16_data
@@ -128,44 +129,41 @@ def postar_tabelas_indices(nome_tabela):
     # insere o prefixo do nome da tabela  
     prefixo = 't0'+ cod_tab  if len(cod_tab) < 2 else 't' + cod_tab 
 
-    #print("(acd_tabelas.py)")
-    #print("========== prefixo: " + prefixo)
-    #_prefix = prefixo.upper()
-    #print("========== PREFIXO: " + force_str(_prefix))
-    #print(my_string.encode('utf-8'))
-
-    print ("tipos de campos begin")
+    debug("(acd_tabelas.py)")
+    debug("========== prefixo: " + prefixo)
+    _prefix = prefixo.upper()
+    debug("========== PREFIXO: " + force_str(_prefix))
+    
+    debug ("tipos de campos begin")
     # obtém os campos especificos de cada tabela
     listacampos = tipos_de_campos(num_codigo_tabela)
-    print ("tipos de campos end")
+    debug ("tipos de campos end")
     
     
     campo = [ prefixo + '_' + listacampos[i] for i in range(len(listacampos))]
     tabela = eval(prefixo.upper() + 'TabelaDCP') #T01TabelaDCP    
     tabDCP = tabela.objects.all()
     
-    #print(campo)
-
     if tabDCP.count() == 0:
         return {}
     
-    #print(tabDCP.count())
-    #print(campo)
+    debug(tabDCP.count())
+    debug(campo)
 
     listaP = criar_lista_campos(tabDCP, num_codigo_tabela, campo)
 
     data_atualizacao = listaP[-1][1]
     numero_linhas = len(listaP)
 
-    _data_atualiza = force_str(data_atualizacao, encoding='utf-8')
-    _num_linhas = force_str(numero_linhas, encoding='utf-8')
-    _cod_tab = force_str(cod_tab, encoding='utf-8')
+    #_data_atualiza = force_str(data_atualizacao, encoding='utf-8')[0:11]
+    #_num_linhas = force_str(numero_linhas, encoding='utf-8')[0:11]
+    #_cod_tab = force_str(cod_tab, encoding='utf-8')[0:50]
     
-    #print('==> data_atualizacao: ' + _data_atualiza)
-    #print('==> tamanho da lista de índices' + _num_linhas)
-    #print('==> código da tabela: ' + _cod_tab)
-    #print('==> tabela: ' + nome_tab)
-    #print('==> descrição: ' + descricao)
+    #debug(f'==> data_atualizacao: {_data_atualiza}')
+    #debug(f'==> tamanho da lista de índices {_num_linhas}')
+    #debug(f'==> código da tabela: {_cod_tab}')
+    #debug('==> tabela: ' + nome_tab)
+    #debug('==> descrição: ' + descricao)
 
     return {'tabela':nome_tab,
             'lista':listaP,

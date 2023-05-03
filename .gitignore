@@ -131,3 +131,11 @@ dmypy.json
 .pyre/
 
 env/
+.dockerignore
+..gitignore.swp
+.DS_Store
+.gitignore
+/.DS_Store
+/app/.DS_Store
+
+

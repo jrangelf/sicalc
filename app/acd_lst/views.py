@@ -14,9 +14,10 @@ from src.verificacpf import validarCPF, formater
 from src.acd_tabelas import postar_tabelas_indices
 from src.serprosoap import buscarDataObito
 from src.serprosoap import buscarFichaFinanceira
-
+from src.configura_debug import *
 
 from .models import *
+
 
 #import pandas as pd 
 
@@ -42,18 +43,15 @@ def upload_file(request):
 
 def ficha(request):
 
-	if DEBUG:
-		print("** FICHA FINANCEIRA **")
+	debug('FICHA FINANCEIRA')
 	
 	if request.method == "POST":
 		x = request.POST.get('numero_cpf')
-		#print("---")
-		#print (x)
-		#print('---')
-
+		
 	first_name = "DCP"
 	last_name = "Brasília-DF"
 	return render(request,'ficha.html',{'first_name':first_name,'last_name':last_name})
+
 
 def fichalista(request):
 	
@@ -67,20 +65,20 @@ def fichalista(request):
 	
 	bruto,desconto,liquido = [0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0]
 	totbruto,totdesc,totliq = 0,0,0
-	print ("** FICHA FINANCERIA LISTA **")
+	debug('FICHA FINANCEIRA LISTA')
 
 	if request.method == "POST":
 		_cpf = request.POST.get('cpf')
 		_anoi = request.POST.get('anoinicial')
 		_anof = request.POST.get('anofinal')
 		
-		#print (_cpf, _anoi, _anof)
+		debug(_cpf, _anoi, _anof)
 		
 		listacpf = validarCPF(_cpf) 
 		
-		#print (listacpf)
+		debug (listacpf)
 		lista_validos = listacpf['validos']
-		#print (lista_validos)
+		debug (lista_validos)
 
 		fichas = buscarFichaFinanceira(lista_validos,_anoi,_anof)		
 
@@ -155,8 +153,8 @@ def obitoslista(request):
 	items = {}
 	msg = ''
 
-	if DEBUG:
-		print("** OBITOS-LISTA **")
+	debug("** OBITOS-LISTA **")
+	print("obitos-lista")
 
 	if request.method == "POST":
 		
@@ -195,9 +193,9 @@ def obitoslista(request):
 				msg = str(total_invalidos) + ' CPF inválido.'
 				messages.success (request, (msg)) 
 
-		#print ('cpf válidos:',lista_validos) 
+		debug('cpf válidos:',lista_validos) 
 		items = buscarDataObito(lista_validos)
-		#print (items)	
+		debug(items)	
 		return render(request,'obitos-lista.html',{'items':items})
 
 		
@@ -251,21 +249,22 @@ def about(request):
 
 def tabelasdcp(request):
 	
-	print ("** TABELASDCP-LISTA **")
+	debug("** TABELASDCP-LISTA **")
 
 	lista_tabelas =[]
 	if request.method == 'POST':
 
-		print ("** TABELASDCP-LISTA POST **")
+		debug("** TABELASDCP-LISTA POST **")
 		
 		lista_registros=[]
 		valores = dict(request.POST.items())
 		for valor in valores.values():
 			lista_registros.append(valor)
 
-		print ("--postar_tabelas_indice(valor)--begin")
+		debug ("--postar_tabelas_indice(valor)--begin")
 		item = postar_tabelas_indices(valor)
-		print ("--postar_tabelas_indice(valor)--end")
+		debug ('item: ')
+		debug (item)
 
 		return render(request, 'tabelasdcp-lista.html', {'contexto': item})	
 	
