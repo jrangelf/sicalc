@@ -1,0 +1,8 @@
+Este aplicativo web auxilia os cálculos executados na PNEP. 
+SICALC se comunica com duas APIs, uma API responsável por obter
+os dados cadastrais e financeiros no servidor web do SERPRO e
+outra API responsável por obter os índices de atualização monetária
+utilizados pela PNEP e um outro programa, chamado revise, responsável
+por obter os indexadores do Banco Central, calcular os índices utilizados
+e popular as tabelas do banco de dados utilizado pela API de índices.
+
